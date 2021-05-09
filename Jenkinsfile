@@ -31,17 +31,17 @@ pipeline {
          
       }
       
-      stage('Sonar Quality Analysis'){
-          steps {
+      //stage('Sonar Quality Analysis'){
+          //steps {
             //def mvnHome = tool name: 'maven-3', type: 'maven'
-            echo 'Beginning Sonar Scan...'
-            withSonarQubeEnv('sonar-6'){
+            //echo 'Beginning Sonar Scan...'
+            //withSonarQubeEnv('sonar-6'){
                 //sh "${mvnHome}/bin/mvn sonar:sonar"
-                sh "mvn sonar:sonar"
-            }
-            echo 'Scan Complete'
-         }
-      }
+                //sh "mvn sonar:sonar"
+            //}
+            //echo 'Scan Complete'
+         //}
+      //}
       
       //stage('SonarQube Quality Gate Check'){
           //steps {
