@@ -1,0 +1,100 @@
+version: "3.7"
+
+#networks:
+#  demo1-network:
+
+services:
+  demo1:
+    image: demo1:latest
+    container_name: demo1
+    mem_limit: 700m
+    depends_on:
+      - db
+      - eureka
+      - spring-cloud-config-server
+    ports:
+      - 8081:8081
+#    networks:
+#      - demo1-network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db:5432/testdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATA_MONGODB_DATABASE: demo2
+      SPRING_DATA_MONGODB_HOST: db
+      SPRING_DATA_MONGODB_PORT: 27017
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+      SPRING_CLOUD_CONFIG_URI: http://spring-cloud-config-server:8888/
+  demo2:
+    image: demo2:latest
+    container_name: demo2
+    mem_limit: 700m
+    depends_on:
+#      - postgres-db
+      - eureka
+      - spring-cloud-config-server
+    ports:
+      - 8082:8082
+#    networks:
+#      - demo1-network
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+      SPRING_CLOUD_CONFIG_URI: http://spring-cloud-config-server:8888/
+          
+  db:
+    image: mongo:latest
+    volumes:
+      - ./database:/data
+    ports:
+      - "27017:27017"
+    container_name: mongo
+#  postgres-db:
+#    image: 'postgres:latest'
+#    container_name: postgres
+##    network_mode: bridge
+##    container_name: postgres
+#    volumes:
+#      - ./database:/postgresql/data
+##    expose:
+##      - 6666
+#    ports:
+#      - "5433:5432"
+#    environment:
+#      - POSTGRES_PASSWORD=admin
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_DB=testdb
+#    restart: unless-stopped
+  eureka:
+    image: eureka:latest
+    container_name: eureka
+    mem_limit: 700m
+    ports:
+      - 8761:8761
+    environment:
+      EUREKA_CLIENT_REGISTER-WITH-EUREKA: "false"
+      EUREKA_CLIENT_FETCH-REGISTRY: "false"
+#    networks:
+#      - demo1-network
+  spring-cloud-config-server:
+    image: spring-cloud-config-server:latest
+    container_name: spring-cloud-config-server
+    mem_limit: 700m
+    ports:
+      - 8888:8888
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+#    networks:
+#      - demo1-network
+  zuul:
+    image: zuul:latest
+    container_name: zuul
+    mem_limit: 700m
+    ports:
+      - 8765:8765
+    depends_on:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+      EUREKA_CLIENT_REGISTRYFETCHINTERVALSECONDS: 5

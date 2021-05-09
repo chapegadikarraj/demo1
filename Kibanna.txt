@@ -1,0 +1,3 @@
+1. start elasticsearch -> bin/elasticsearch
+2. start kibanna pointing to port on which elasticearch is up. -> bin/kibanna
+3. start logstash -> bin/logstash -f demo1.conf
