@@ -37,8 +37,8 @@ pipeline {
             echo 'Deploying Project...'
             //sh "${mvnHome}/bin/mvn clean install"
             //sh 'mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true'
-            sshagent(['tomcat-admin']) {
-            sh "scp 1-multibranch-github_development/target/Demo1-0.0.1-SNAPSHOT.war admin@18.221.115.64:/var/lib/tomcat/webapps"
+            sshagent(['tomcat-user']) {
+            sh "scp -o StrictHostKeyChecking-no 1-multibranch-github_development/target/Demo1-0.0.1-SNAPSHOT.war admin@18.221.115.64:/var/lib/tomcat/webapps"
             }
             echo 'Project Build complete'
          }   
