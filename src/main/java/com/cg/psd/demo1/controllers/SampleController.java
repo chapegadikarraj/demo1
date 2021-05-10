@@ -38,6 +38,12 @@ public class SampleController {
 	@Autowired
 	private ProfileService service;
 	
+	@RequestMapping(value="/hello", method=RequestMethod.GET)
+	public String funException(){
+		
+		return "Hello World";
+	}
+	
 	@RequestMapping(value="/funPost",method=RequestMethod.POST, produces="application/xml")
 	public Profile funPost(
 			/* @Valid */@RequestBody Profile profile, 
