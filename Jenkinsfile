@@ -40,7 +40,7 @@ pipeline {
             //sshagent(['tomcat-user']) {
             //sh "scp -o StrictHostKeyChecking-no 1-multibranch-github_development/target/Demo1-0.0.1-SNAPSHOT.war admin@18.221.115.64:/var/lib/tomcat/webapps"
             //}
-            sh "curl -v -u admin:admin -T /var/lib/jenkins/workspace/demo-multibranch_main/target/Demo1-0.0.1-SNAPSHOT.jar 'ec2-18-217-214-107.us-east-2.compute.amazonaws.com:8080//manager/text/deploy?path=/demo1'"
+            sh "curl -v -u admin:admin -T /var/lib/jenkins/workspace/demo-multibranch_main/target/Demo1-0.0.1-SNAPSHOT.jar 'http://ec2-18-223-159-90.us-east-2.compute.amazonaws.com:8080//manager/text/deploy?path=/demo1'"
             echo 'Deployment complete'
          }   
          
