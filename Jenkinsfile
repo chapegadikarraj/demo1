@@ -9,6 +9,9 @@ pipeline {
        dockerImage = ''
    }
    agent any
+   tools {
+   	maven 'Maven 3.6.3'
+   }
    stages {
       stage('Checkout Code') {
          steps {
@@ -31,40 +34,20 @@ pipeline {
          
       }
       
-      stage('Deploy to Server'){
-         steps {
+      stage('Deploy to Tomcat'){
+          steps {
             
             echo 'Deploying Project...'
             //sh "${mvnHome}/bin/mvn clean install"
             //sh 'mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true'
-            sshagent(credentials: ['ec2-user']) {
-            	sh 'ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-14-6-42.us-east-2.compute.amazonaws.com rm -rf /home/ec2-user/demo-multibranch_main/target/Demo1-0.0.1-SNAPSHOT.jar'
-				//sh 'ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-14-6-42.us-east-2.compute.amazonaws.com mkdir -p /home/ec2-user/demo-multibranch_main/target/'
-				sh 'scp -o StrictHostKeyChecking=no -r /var/lib/jenkins/workspace/demo1_main/target/Demo1-0.0.1-SNAPSHOT.jar ec2-user@ec2-3-14-6-42.us-east-2.compute.amazonaws.com:/home/ec2-user/demo1/target'
-				sh 'ssh -o StrictHostKeyChecking=no ec2-user@ec2-18-191-113-162.us-east-2.compute.amazonaws.com java -jar /home/ec2-user/demo1/target/Demo1-0.0.1-SNAPSHOT.jar'
+            //sshagent(['tomcat-user']) {
             //sh "scp -o StrictHostKeyChecking-no 1-multibranch-github_development/target/Demo1-0.0.1-SNAPSHOT.war admin@18.221.115.64:/var/lib/tomcat/webapps"
-            }
-            //sh "curl -v -u admin:admin -T /var/lib/jenkins/workspace/demo-multibranch_main/target/Demo1-0.0.1-SNAPSHOT.jar 'http://ec2-18-223-159-90.us-east-2.compute.amazonaws.com:8080//manager/text/deploy?path=/demo1'"
-            
+            //}
+            sh "curl -v -u admin:admin -T /var/lib/jenkins/workspace/demo1_main/target/Demo1-0.0.1-SNAPSHOT.jar 'http://ec2-18-218-146-255.us-east-2.compute.amazonaws.com:8080//manager/text/deploy?path=/demo1'"
             echo 'Deployment complete'
          }   
          
       }
-      
-      //stage('Deploy to Tomcat'){
-         //steps {
-            
-            //echo 'Deploying Project...'
-            //sh "${mvnHome}/bin/mvn clean install"
-            //sh 'mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true'
-            //sshagent(credentials: ['ec2-user']) {
-            //sh "scp -o StrictHostKeyChecking-no 1-multibranch-github_development/target/Demo1-0.0.1-SNAPSHOT.war admin@18.221.115.64:/var/lib/tomcat/webapps"
-            //}
-            //sh "curl -v -u admin:admin -T /var/lib/jenkins/workspace/demo-multibranch_main/target/Demo1-0.0.1-SNAPSHOT.jar 'http://ec2-18-223-159-90.us-east-2.compute.amazonaws.com:8080//manager/text/deploy?path=/demo1'"
-            //echo 'Deployment complete'
-         //}   
-         
-      //}
       
       //stage('Sonar Quality Analysis'){
           //steps {
