@@ -38,8 +38,8 @@ pipeline {
             //sh "${mvnHome}/bin/mvn clean install"
             //sh 'mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true'
             sshagent(credentials: ['ec2-user']) {
-            	sh 'ssh ec2-user@ec2-3-14-6-42.us-east-2.compute.amazonaws.com rm -rf /home/ec2-user/demo-multibranch_main/target/'
-				sh 'ssh ec2-user@ec2-3-14-6-42.us-east-2.compute.amazonaws.com mkdir -p /home/ec2-user/demo-multibranch_main/target/'
+            	sh 'ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-14-6-42.us-east-2.compute.amazonaws.com rm -rf /home/ec2-user/demo-multibranch_main/target/'
+				sh 'ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-14-6-42.us-east-2.compute.amazonaws.com mkdir -p /home/ec2-user/demo-multibranch_main/target/'
 				sh 'scp -r /var/lib/jenkins/workspace/demo1_main/target ec2-user@ec2-3-14-6-42.us-east-2.compute.amazonaws.com:/home/ec2-user/demo1'
 				sh 'ssh ec2-user@ec2-18-191-113-162.us-east-2.compute.amazonaws.com java -jar /home/ec2-user/demo1/Demo1-0.0.1-SNAPSHOT.jar'
             //sh "scp -o StrictHostKeyChecking-no 1-multibranch-github_development/target/Demo1-0.0.1-SNAPSHOT.war admin@18.221.115.64:/var/lib/tomcat/webapps"
