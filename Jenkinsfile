@@ -16,7 +16,7 @@ pipeline {
       stage('Checkout Code') {
          steps {
             echo 'Checking out code from bitbucket...'
-            git url: 'https://chapegadikarraj@bitbucket.org/chapegadikarraj/demo1.git'
+            git url: 'https://github.com/chapegadikarraj/demo1.git'
             echo 'Checked out source code.'
          }
       }
